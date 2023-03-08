@@ -18,35 +18,37 @@ class Circle {
   }
 }
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
+// Initialisation du canvas
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
+// Création d'un objet rond
 Cercle = new Circle(70, canvas.width / 2, canvas.height / 2, 0)
 
 
-
+// Traqueur de souris
 function mouseupdate (){
-  return "coucou"
+  window.pos = [event.clientX, event.clientY]
 }
+addEventListener("mousemove", mouseupdate)
 
-addEventListener("mousemove", function(event){
-  var pos = mouseupdate(event);})
+// Position par défaut de la souris
+window.pos = [canvas.width / 2, canvas.height / 2]
 
-async function coucou(){
-await sleep(500)
-console.log(pos);
+
+function main(){
 canvas.width = window.innerWidth;
 Cercle.DrawThis()
-Cercle.posX = (Cercle.posX + (pos))/2
-Cercle.posY = Cercle.posY
-}
+Cercle.posX = window.pos[0]
+Cercle.posY = window.pos[1]
 
-coucou()
+}
+main()
+
+
+
+
 
 
