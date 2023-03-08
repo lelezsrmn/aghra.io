@@ -34,7 +34,7 @@ function mouseupdate (){
 }
 addEventListener("mousemove", mouseupdate)
 
-// Position par défaut de la souris
+// Position par défaut dela souris
 window.pos = [canvas.width / 2, canvas.height / 2]
 
 
