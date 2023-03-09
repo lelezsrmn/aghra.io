@@ -23,6 +23,7 @@ var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
+canvas.style.background ="#ff8"
 
 // Création d'un objet rond
 Cercle = new Circle(70, canvas.width / 2, canvas.height / 2, 0)
@@ -37,15 +38,26 @@ addEventListener("mousemove", mouseupdate)
 // Position par défaut de la souris
 window.pos = [canvas.width / 2, canvas.height / 2]
 
-
-function main(){
-canvas.width = window.innerWidth;
-Cercle.DrawThis()
-Cercle.posX = window.pos[0]
-Cercle.posY = window.pos[1]
-
+function getSpeed(){
+  speedX = 0.05
+  speedY = 0.05
+  return [(window.pos[0] - Cercle.posX)*speedX, (window.pos[1] - Cercle.posY)*speedY]
 }
-main()
+
+function loop() {
+  canvas.width = window.innerWidth;
+  //Déplacement du cercle
+  speed = getSpeed()
+  Cercle.posX += speed[0];
+  Cercle.posY += speed[1];
+
+  console.log(Math.round(window.pos[0] - Cercle.posX), "/////", Math.round(window.pos[1] - Cercle.posY))
+  Cercle.DrawThis()
+  requestAnimationFrame(loop);
+}
+
+
+loop()
 
 
 
