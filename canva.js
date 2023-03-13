@@ -1,3 +1,7 @@
+//Ici on va s'occuper du jeu.
+
+//Si qqn est motivé et souhaite modifier la structure pour mettre la class dans un module js et de même pour les fonctions.
+
 class Circle {
   constructor(poids, posX, posY, img=null) {
     this.poids = poids;
@@ -28,27 +32,16 @@ class Circle {
     }
   }
 }
-
-// Initialisation du canvas
-var canvas = document.getElementById("canvas");
-var ctx = canvas.getContext("2d");
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-canvas.style.background ="#ff8"
-
-// Création d'un objet rond
-var Cercle = new Circle(150, canvas.width / 2, canvas.height / 2, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRO5R_8dF3qsQCSbsbc61esJFbUffJ862WN6Q&usqp=CAU")
-
-// Traqueur de souris
+function sleep(ms) {
+  //Timer pour faire une pause
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 function mouseupdate (){
+  // Traqueur de souris
   window.pos = [event.clientX, event.clientY]
 }
-addEventListener("mousemove", mouseupdate)
-
-// Position par défaut dela souris
-window.pos = [canvas.width / 2, canvas.height / 2]
-
 function getSpeed(){
+  //Pour le mouvement du cercle
   speedX = 0.05
   speedY = 0.05
   maxVecteur = 0.02
@@ -58,17 +51,59 @@ function getSpeed(){
   vdx = Math.floor(dX / 100)
   return [dX*speedX, dY*speedY]
 }
+async function timerPoint(){
+// Timer random qui va entraîner un spawn de petits points
+Time = Math.floor(Math.random()*5000) + 1
+setTimeout(() => {
+  creationPoint();
+  timerPoint()
+}, Time);
+}
+function creationPoint(){
+  nbPointMax = 10
 
+  nbPoint = Math.floor(Math.random() * nbPointMax) + 1
+  for(i=0; i<nbPoint; i++){
+    console.log("un point en plus")
+  }
+}
 function loop() {
-
+// Fonction qui va se répéter
   canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
 
   //Déplacement du cercle
   speed = getSpeed()
   Cercle.posX += speed[0];
   Cercle.posY += speed[1];
+
   Cercle.DrawThis()
 
   requestAnimationFrame(loop);
 }
-loop()
+
+function Main() {
+  timerPoint()
+  loop()
+}
+
+
+// Initialisation
+
+var canvas = document.getElementById("canvas");
+var ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+canvas.style.background ="#ff8"
+
+addEventListener("mousemove", mouseupdate)
+
+// Position par défaut dela souris
+window.pos = [canvas.width / 2, canvas.height / 2]
+
+// Création d'un objet rond
+var Cercle = new Circle(150, canvas.width / 2, canvas.height / 2, "https://media3.giphy.com/media/3og0IuGb2e5U3bMIco/giphy.gif")
+
+Main()
