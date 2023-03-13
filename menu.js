@@ -15,4 +15,5 @@ function toggleFullScreen() {
 }
 
 // Ligne à modifier pour faire le mode plein écran lors du clique sur un bouton spécifique
-addEventListener("click", fullscreen)
+var fullscreenBtn = document.getElementById("fullScreen");
+fullscreenBtn.addEventListener("click", fullscreen)

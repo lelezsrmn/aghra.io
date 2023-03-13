@@ -7,15 +7,20 @@ class Circle {
     this.poids = poids;
     this.posX = posX;
     this.posY = posY;
-    this.img = new Image();
-    this.img.src = img;
+    if(img != null) {
+      this.img = new Image();
+      this.img.src = img;
+    } else {
+      this.img = null;
+    }
+    this.color = randomColor()
   }
 
   DrawThis(){
     if (this.img == null){
       ctx.beginPath();
       ctx.arc(this.posX, this.posY, this.poids, 0, 2 * Math.PI);
-      ctx.fillStyle = "#fff";
+      ctx.fillStyle = this.color;
       ctx.fill();
     } else {
       if(true){
@@ -35,6 +40,12 @@ class Circle {
 function sleep(ms) {
   //Timer pour faire une pause
   return new Promise(resolve => setTimeout(resolve, ms));
+}
+function randomColor(){
+  answers = ["#0000FF", "#008000", "#800080", "#FF0000", "#F0F8FF",
+              "#FF7F50", "#B22222", "#FF69B4", "#FFFACD", "E389B9"]
+  var nb = Math.floor(Math.random() * answers.length)
+  return answers[nb]
 }
 function mouseupdate (){
   // Traqueur de souris
@@ -64,7 +75,9 @@ function creationPoint(){
 
   nbPoint = Math.floor(Math.random() * nbPointMax) + 1
   for(i=0; i<nbPoint; i++){
-    console.log("un point en plus")
+    x = Math.floor(Math.random() * canvas.width) + 1
+    y = Math.floor(Math.random() * canvas.width) + 1
+    listePoint.push(new Circle(10, x, y))
   }
 }
 function loop() {
@@ -77,8 +90,12 @@ function loop() {
   Cercle.posX += speed[0];
   Cercle.posY += speed[1];
 
+  for(i=0; i < listePoint.length - 1; i++) {
+    console.log(i, listePoint.length)
+    console.log(listePoint[i])
+    listePoint[i].DrawThis()
+  }
   Cercle.DrawThis()
-
   requestAnimationFrame(loop);
 }
 
@@ -106,4 +123,5 @@ window.pos = [canvas.width / 2, canvas.height / 2]
 // Création d'un objet rond
 var Cercle = new Circle(150, canvas.width / 2, canvas.height / 2, "https://media3.giphy.com/media/3og0IuGb2e5U3bMIco/giphy.gif")
 
+let listePoint = []
 Main()

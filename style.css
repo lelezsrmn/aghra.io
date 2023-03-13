@@ -4,3 +4,15 @@
     overflow-y: hidden;
     overflow-x: hidden;
 }
+
+.fullScreen {
+    position: fixed;
+    display: inline-flex;
+    bottom: 5px;
+    left: 5px;
+}
+
+.fullScreenBtn {
+    width: 20%;
+    cursor: pointer;
+}
