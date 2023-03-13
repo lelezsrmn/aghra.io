@@ -3,10 +3,11 @@
 //Si qqn est motivé et souhaite modifier la structure pour mettre la class dans un module js et de même pour les fonctions.
 
 class Circle {
-  constructor(poids, posX, posY, img=null) {
+  constructor(poids, posX, posY, username=null, img=null) {
     this.poids = poids;
     this.posX = posX;
     this.posY = posY;
+    this.username = username
     if(img != null) {
       this.img = new Image();
       this.img.src = img;
@@ -25,16 +26,22 @@ class Circle {
     } else {
       if(true){
         // Vérifiez si l'image est chargée avec succès
-        ctx.save()
-        ctx.beginPath()
-        ctx.arc(this.posX, this.posY, this.poids, 0, Math.PI * 2, false)
-        ctx.strokeStyle = '#2465D3'
-        ctx.stroke()
-        ctx.clip()
-        ctx.drawImage(this.img, this.posX - this.poids, this.posY - this.poids, this.poids * 2, this.poids * 2)
-        ctx.restore()
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(this.posX, this.posY, this.poids, 0, Math.PI * 2, false);
+        ctx.strokeStyle = '#2465D3';
+        ctx.stroke();
+        ctx.clip();
+        ctx.drawImage(this.img, this.posX - this.poids, this.posY - this.poids, this.poids * 2, this.poids * 2);
+        ctx.restore();
       }
     }
+    if(this.username != null){
+      ctx.font = this.poids/4 + "px Colibri";
+      ctx.strokeText(this.username, this.posX - this.poids / 2, this.posY);
+    }
+    ctx.font = this.poids/6 + "px Colibri";
+    ctx.strokeText(this.poids, this.posX, this.posY + this.poids/4);
   }
 }
 function sleep(ms) {
@@ -42,8 +49,8 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 function randomColor(){
-  answers = ["#0000FF", "#008000", "#800080", "#FF0000", "#F0F8FF",
-              "#FF7F50", "#B22222", "#FF69B4", "#FFFACD", "E389B9"]
+  answers = ["#0000FF", "#008000", "#800080", "#FF0000",
+              "#FF7F50", "#B22222", "#FF69B4", "#E389B9"]
   var nb = Math.floor(Math.random() * answers.length)
   return answers[nb]
 }
@@ -80,25 +87,41 @@ function creationPoint(){
     listePoint.push(new Circle(10, x, y))
   }
 }
-function loop() {
-// Fonction qui va se répéter
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
 
+function detectCollision(circle1, circle2) {
+  const distance = Math.sqrt((circle1.posX - circle2.posX)**2 + (circle1.posY - circle2.posY)**2)
+  return distance <= circle1.poids + circle2.poids
+}
+
+function loop() {
+  // Fonction qui va se répéter
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
   //Déplacement du cercle
   speed = getSpeed()
   Cercle.posX += speed[0];
   Cercle.posY += speed[1];
 
-  for(i=0; i < listePoint.length - 1; i++) {
-    console.log(i, listePoint.length)
-    console.log(listePoint[i])
-    listePoint[i].DrawThis()
+  // Vérifiez si le cercle principal entre en collision avec un cercle dans la liste
+  for (let i = 0; i < listePoint.length; i++) {
+    const point = listePoint[i]
+    if (detectCollision(Cercle, point)) {
+      // Supprimer le cercle de la liste
+      listePoint.splice(i, 1);
+      // Augmenter le poids du cercle principal
+      Cercle.poids += 5;
+    } else {
+      // Afficher le cercle
+      point.DrawThis();
+    }
   }
+
+  // Afficher le cercle principal
   Cercle.DrawThis()
+
+  // Appeler la fonction en boucle
   requestAnimationFrame(loop);
 }
-
 function Main() {
   timerPoint()
   loop()
@@ -121,7 +144,7 @@ addEventListener("mousemove", mouseupdate)
 window.pos = [canvas.width / 2, canvas.height / 2]
 
 // Création d'un objet rond
-var Cercle = new Circle(150, canvas.width / 2, canvas.height / 2, "https://media3.giphy.com/media/3og0IuGb2e5U3bMIco/giphy.gif")
+var Cercle = new Circle(150, canvas.width / 2, canvas.height / 2, "Mia Khalifa")
 
 let listePoint = []
 Main()
